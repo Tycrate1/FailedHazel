@@ -3,9 +3,12 @@
 #include "Event.h"
 
 namespace Hazel {
-	class HAZEL_API KeyEvent : public Event {
+	class KeyEvent : public Event
+	{
 	public:
-		inline int GetKeyCode(EventCategoryKeyboard | EventCategoryInput)
+		inline int GetKeyCode() const { return m_KeyCode; }
+
+		EVENT_CLASS_CATEGORY(EventCategoryKeyboard | EventCategoryInput) // <- notice this line
 	protected:
 		KeyEvent(int keycode)
 			: m_KeyCode(keycode) {}
@@ -13,7 +16,7 @@ namespace Hazel {
 		int m_KeyCode;
 	};
 
-	class HAZEL_API KeyPressedEvent : public keyEvent {
+	class HAZEL_API KeyPressedEvent : public KeyEvent {
 	public:
 		KeyPressedEvent(int keycode, int repeatCount)
 			: KeyEvent(keycode), m_RepeatCount(repeatCount) {}
@@ -22,13 +25,13 @@ namespace Hazel {
 
 		std::string ToString() const override {
 			std::stringstream ss;
-			ss << "KeyPressedEvent: " << m_KeyCode << " (" << m_ReapeatCount << " repeats)";
+			ss << "KeyPressedEvent: " << m_KeyCode << " (" << m_RepeatCount << " repeats)";
 			return ss.str();
 		}
 
-		EVENT_CLASS_TYPE(keyPressed)
+		EVENT_CLASS_TYPE(KeyPressed)
 	private:
-		int m_ReapeatCount;
+		int m_RepeatCount;
 	};
 
 	class HAZEL_API KeyReleasedEvent : public KeyEvent {
@@ -42,6 +45,6 @@ namespace Hazel {
 			return ss.str();
 		}
 
-		EVENT_CLASS_TYPE(keyReleased)
+		EVENT_CLASS_TYPE(KeyReleased)
 	};
 }
